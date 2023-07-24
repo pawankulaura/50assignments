@@ -1,0 +1,17 @@
+A common use case where you would use a DaemonSet instead of a ReplicaSet is when you need to ensure that a specific pod runs on every node in the Kubernetes cluster.
+
+A DaemonSet is a Kubernetes resource that ensures that a copy of a specific pod is running on each node in the cluster. It is particularly useful for deploying background services, monitoring agents, or any other workloads that need to be present on all nodes for cluster-wide functionality or monitoring purposes.
+
+Some examples of when to use a DaemonSet include:
+
+1. **Monitoring Agents**: If you need to deploy monitoring agents (e.g., Prometheus Node Exporter, Fluentd, etc.) on each node to collect metrics and logs from all nodes in the cluster, a DaemonSet would be a good fit.
+
+2. **Storage Provisioners**: For storage-related workloads, such as setting up storage provisioners for dynamic volume provisioning, you might want to ensure that the provisioner runs on every node to handle local storage.
+
+3. **Security and Networking**: DaemonSets are used for deploying container networking plugins (CNI) or security agents (e.g., Calico, Weave, etc.) on all nodes to enable communication and security features.
+
+4. **Resource Monitoring**: If you have a resource monitoring solution that needs to collect node-level metrics or resource usage data from every node, you can use a DaemonSet to deploy the monitoring agent on each node.
+
+In contrast, a ReplicaSet is more suitable when you want to ensure a specific number of replicas (pods) are running in your cluster, regardless of how many nodes are present. It is commonly used for stateless applications where the individual instances (pods) are interchangeable and can be scheduled on any available node.
+
+To summarize, use a DaemonSet when you need to ensure a specific pod runs on every node in the cluster, and use a ReplicaSet when you want to ensure a certain number of replicas of a pod are running, irrespective of the number of nodes in the cluster.
