@@ -1,0 +1,47 @@
+To update a container's image in a Kubernetes Deployment without causing any downtime, you can follow these steps:
+
+1. **Update the Container Image**: Modify the container image field in the Deployment specification to the new version or tag of the image that you want to use.
+
+You can update the image directly in the Deployment YAML file, or you can use the `kubectl set image` command to update the image for the Deployment. For example:
+
+
+kubectl set image deployment/<deployment_name> <container_name>=<new_image_tag>
+
+
+Replace `<deployment_name>` with the name of your Deployment and `<container_name>` with the name of the container whose image you want to update. `<new_image_tag>` should be the new version or tag of the image you want to use.
+
+2. **Check Deployment Status**: After updating the Deployment, use the following command to check the status of the rollout:
+
+
+kubectl rollout status deployment/<deployment_name>
+
+
+This command will show you the current status of the Deployment rollout, including the number of updated and available replicas.
+
+3. **Scaling the Deployment**: To ensure there is no downtime during the update, scale up the number of replicas before scaling down the old ones. This allows the new pods to be created and ready to serve traffic before terminating the old ones.
+
+
+kubectl scale deployment/<deployment_name> --replicas=<desired_number_of_replicas>
+
+
+Set `<desired_number_of_replicas>` to a value greater than the current number of replicas. For example, if you initially had 1 replica, set it to 2 or more.
+
+4. **Check Rollout Status Again**: After scaling up, check the rollout status again to ensure the new replicas are running and available.
+
+
+kubectl rollout status deployment/<deployment_name>
+
+
+5. **Scaling Down Old Replicas**: Now that the new replicas are running and available, scale down the old replicas to zero.
+
+
+kubectl scale deployment/<deployment_name> --replicas=0
+
+
+6. **Final Rollout Check**: Verify that the old replicas are terminated, and the updated replicas are still running successfully.
+
+
+kubectl rollout status deployment/<deployment_name>
+
+
+After completing these steps, your Deployment will be updated with the new container image without any downtime. The scaling up and down of replicas ensures a smooth transition from the old version to the new version of your application.
